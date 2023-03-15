@@ -1,8 +1,9 @@
-import express, {json, Request, Response} from "express";
+import express, {json} from "express";
 import cors from "cors";
 import "express-async-errors";
-import {handleError, ValidationError} from "./utils/error";
+import {handleError} from "./utils/error";
 import {pollRouter} from "./routers/poll";
+import {userRouter} from "./routers/user";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors({
 app.use(json());
 
 app.use("/poll", pollRouter);
+app.use("/user", userRouter);
 
 app.use(handleError);
 

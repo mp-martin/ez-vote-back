@@ -8,7 +8,7 @@ type QuestionRecordResults = [QuestionRecord[], FieldPacket[]]
 
 export class QuestionRecord implements QuestionEntity {
 
-	question_id?: string;
+	question_id: string;
 	question_body: string;
 	pollId: string;
 

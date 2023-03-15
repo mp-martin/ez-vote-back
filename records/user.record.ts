@@ -24,19 +24,19 @@ export class UserRecord implements UserEntity {
 		this.user_pw = obj.user_pw;
 	}
 
-	async insert(): Promise<string> {
-		if (!this.user_id) {
-			this.user_id = uuid();
+	static async insert(userObj: UserEntity): Promise<string> {
+		if (!userObj.user_id) {
+			userObj.user_id = uuid();
 		}
 
 		await pool.execute("INSERT INTO `users`(`user_id`, `user_name`, `user_login`, `user_pw`) VALUES(:id, :name, :login, :pw)", {
-			id: this.user_id,
-			name: this.user_name,
-			login: this.user_login,
-			pw: this.user_pw
+			id: userObj.user_id,
+			name: userObj.user_name,
+			login: userObj.user_login,
+			pw: userObj.user_pw
 		});
 
-		return this.user_id;
+		return userObj.user_id;
 	}
 
 	static async getOne(id: string): Promise<UserRecord | null> {
