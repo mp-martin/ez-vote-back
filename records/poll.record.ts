@@ -22,18 +22,18 @@ export class PollRecord implements PollEntity {
 		this.poll_owner = obj.poll_owner;
 	}
 
-	async insert(): Promise<string> {
-		if (!this.poll_id) {
-			this.poll_id = uuid();
+	static async insert(pollObj: PollEntity): Promise<string> {
+		if (!pollObj.poll_id) {
+			pollObj.poll_id = uuid();
 		}
 
 		await pool.execute("INSERT INTO `polls`(`poll_id`, `poll_title`, `poll_owner`) VALUES(:id, :title, :owner)", {
-			id: this.poll_id,
-			title: this.poll_title,
-			owner: this.poll_owner,
+			id: pollObj.poll_id,
+			title: pollObj.poll_title,
+			owner: pollObj.poll_owner,
 		});
 
-		return this.poll_id;
+		return pollObj.poll_id;
 	}
 
 	static async getOne(id: string): Promise<PollRecord | null> {

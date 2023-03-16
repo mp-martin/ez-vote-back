@@ -24,18 +24,18 @@ export class AnswerRecord implements AnswerEntity {
 		this.votes = obj.votes;
 	}
 
-	async insert(): Promise<string> {
-		if (!this.answer_id) {
-			this.answer_id = uuid();
+	static async insert(answerObj: AnswerEntity): Promise<string> {
+		if (!answerObj.answer_id) {
+			answerObj.answer_id = uuid();
 		}
 
 		await pool.execute("INSERT INTO `answers`(`answer_id`, `answer_body`, `questionId`) VALUES(:id, :body, :questionId)", {
-			id: this.answer_id,
-			body: this.answer_body,
-			questionId: this.questionId,
+			id: answerObj.answer_id,
+			body: answerObj.answer_body,
+			questionId: answerObj.questionId,
 		});
 
-		return this.answer_id;
+		return answerObj.answer_id;
 	}
 
 	static async getOne(id: string): Promise<AnswerRecord | null> {

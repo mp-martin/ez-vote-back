@@ -22,18 +22,18 @@ export class QuestionRecord implements QuestionEntity {
 		this.pollId = obj.pollId;
 	}
 
-	async insert(): Promise<string> {
-		if (!this.question_id) {
-			this.question_id = uuid();
+	static async insert(qObj: QuestionEntity): Promise<string> {
+		if (!qObj.question_id) {
+			qObj.question_id = uuid();
 		}
 
 		await pool.execute("INSERT INTO `questions`(`question_id`, `question_body`, `pollId`) VALUES(:id, :body, :pollId)", {
-			id: this.question_id,
-			body: this.question_body,
-			pollId: this.pollId,
+			id: qObj.question_id,
+			body: qObj.question_body,
+			pollId: qObj.pollId,
 		});
 
-		return this.question_id;
+		return qObj.question_id;
 	}
 
 	static async getOne(id: string): Promise<QuestionRecord | null> {

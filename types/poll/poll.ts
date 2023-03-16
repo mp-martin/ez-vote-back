@@ -7,7 +7,7 @@ export interface PollEntity {
     poll_owner?: string | null;
 }
 
-interface AnswerPool {
+export interface AnswerPool {
     question_header: QuestionRecord,
     answers: AnswerEntity[]
 }
