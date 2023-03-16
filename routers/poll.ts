@@ -16,15 +16,13 @@ pollRouter
 		// try {
 		const pollId = await PollRecord.insert(newPollRecord);
 		newPoll.poll_header["poll_id"] = pollId;
-
-		const newQuestionRecords: QuestionEntity[] = newPoll.poll_body.map((element) => {
-			return {
-				...element.question_header,
-				pollId
-			};
+		newPoll.poll_body.map((element) => {
+			element.question_header.pollId = pollId;
 		});
 
-		newPoll.poll_body	;
+		const newQuestionRecords = newPoll.poll_body.map(element =>  {return {
+			element[0],
+		};});
 
 
 
@@ -41,8 +39,8 @@ pollRouter
 		// await Promise.all(newAnswerRecords.map(async (record) => await AnswerRecord.insert(record)));
 
 		res.json({
-			newPoll
-			// newQuestionRecords,
+			newPoll,
+			newQuestionRecords,
 			// newAnswerRecords
 		});
 		// } catch(e) {
