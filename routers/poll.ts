@@ -11,32 +11,32 @@ pollRouter
 
 	.post("/", async (req, res) => {
 		const newPoll: CompletePoll = req.body;
-		const newPollRecord: PollEntity = newPoll.poll_header;
+		const newPollRecord: PollEntity = newPoll.pollHeader;
 
 		try {
 			const pollId = await PollRecord.insert(newPollRecord);
-			newPoll.poll_header["poll_id"] = pollId;
-			newPoll.poll_body.map((element) => {
-				element.question_header.pollId = pollId;
+			newPoll.pollHeader["pollId"] = pollId;
+			newPoll.pollBody.map((element) => {
+				element.questionHeader.pollId = pollId;
 			});
 
-			const newQuestionRecords: QuestionEntity[] = newPoll.poll_body.map((element) => {
+			const newQuestionRecords: QuestionEntity[] = newPoll.pollBody.map((element) => {
 				return {
-					...element.question_header
+					...element.questionHeader
 				};
 			});
 
 			const questionIds = await Promise.all(newQuestionRecords.map(async (record) => await QuestionRecord.insert(record)));
 
-			newPoll.poll_body.map((element, index) => {
-				element.question_header.question_id = questionIds[index];
+			newPoll.pollBody.map((element, index) => {
+				element.questionHeader.questionId = questionIds[index];
 			});
 
-			const newAnswerRecords = newPoll.poll_body.map((element) => {
+			const newAnswerRecords = newPoll.pollBody.map((element) => {
 				return element.answers.map((answer) => {
 					return {
 						...answer,
-						questionId: element.question_header.question_id
+						questionId: element.questionHeader.questionId
 					};
 				});
 			}).flat();
@@ -71,22 +71,22 @@ pollRouter
 		}
 
 		const promises = questions.map(async (question) => {
-			const answers = await AnswerRecord.getByQuestionOfOrigin(question.question_id);
+			const answers = await AnswerRecord.getByQuestionOfOrigin(question.questionId);
 
 			if (!answers) {
 				throw new ValidationError("Cannot get answers from the poll. Please try again later.");
 			}
 
 			return {
-				question_header: question,
+				questionHeader: question,
 				answers
 			};
 		});
 		const answers = await Promise.all(promises);
 
 		const completePoll: CompletePoll = {
-			poll_header: poll,
-			poll_body: answers
+			pollHeader: poll,
+			pollBody: answers
 		};
 
 

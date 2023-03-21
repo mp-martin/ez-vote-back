@@ -1,5 +1,6 @@
 export interface QuestionEntity {
-    question_id: string;
-    question_body: string;
+    questionId: string;
+    questionBody: string;
+    questionType: string;
     pollId: string;
 }

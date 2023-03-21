@@ -8,38 +8,38 @@ type AnswerRecordResults = [AnswerRecord[], FieldPacket[]]
 
 export class AnswerRecord implements AnswerEntity {
 
-	answer_id?: string;
-	answer_body: string;
+	answerId?: string;
+	answerBody: string;
 	questionId: string;
 	votes: number;
 
 	constructor(obj: AnswerEntity) {
-		if (!obj.answer_body) {
+		if (!obj.answerBody) {
 			throw new ValidationError("Content of the answer needed!");
 		}
 
-		this.answer_id = obj.answer_id;
-		this.answer_body = obj.answer_body;
+		this.answerId = obj.answerId;
+		this.answerBody = obj.answerBody;
 		this.questionId = obj.questionId;
 		this.votes = obj.votes;
 	}
 
 	static async insert(answerObj: AnswerEntity): Promise<string> {
-		if (!answerObj.answer_id) {
-			answerObj.answer_id = uuid();
+		if (!answerObj.answerId) {
+			answerObj.answerId = uuid();
 		}
 
-		await pool.execute("INSERT INTO `answers`(`answer_id`, `answer_body`, `questionId`) VALUES(:id, :body, :questionId)", {
-			id: answerObj.answer_id,
-			body: answerObj.answer_body,
+		await pool.execute("INSERT INTO `answers`(`answerId`, `answerBody`, `questionId`) VALUES(:id, :body, :questionId)", {
+			id: answerObj.answerId,
+			body: answerObj.answerBody,
 			questionId: answerObj.questionId,
 		});
 
-		return answerObj.answer_id;
+		return answerObj.answerId;
 	}
 
 	static async getOne(id: string): Promise<AnswerRecord | null> {
-		const [results] = (await pool.execute("SELECT * FROM `answers` WHERE `answer_id` = :id", {
+		const [results] = (await pool.execute("SELECT * FROM `answers` WHERE `answerId` = :id", {
 			id,
 		})) as AnswerRecordResults;
 
@@ -63,11 +63,11 @@ export class AnswerRecord implements AnswerEntity {
 		selectedAnswer.votes++;
 		console.log(selectedAnswer);
 
-		await pool.execute("UPDATE `answers` SET `votes` = :votes WHERE `answer_id` = :id", {
-			id: selectedAnswer.answer_id,
+		await pool.execute("UPDATE `answers` SET `votes` = :votes WHERE `answerId` = :id", {
+			id: selectedAnswer.answerId,
 			votes: selectedAnswer.votes,
 		});
-		return `The answer ${selectedAnswer.answer_body} now has ${selectedAnswer.votes} votes`;
+		return `The answer ${selectedAnswer.answerBody} now has ${selectedAnswer.votes} votes`;
 	}
 
 }
