@@ -4,3 +4,7 @@ export interface AnswerEntity {
     votes: number;
     questionId: string;
 }
+
+export type AnswerEntityRequest = {
+	answerBody: string;
+};

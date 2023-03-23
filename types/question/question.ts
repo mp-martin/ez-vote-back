@@ -4,3 +4,8 @@ export interface QuestionEntity {
     questionType: string;
     pollId: string;
 }
+
+export type QuestionEntityRequest = {
+	questionBody: string;
+	questionType: string;
+};
