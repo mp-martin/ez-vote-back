@@ -48,7 +48,7 @@ pollRouter
 				"newPollId": pollId
 			});
 
-		} catch(e) {
+		} catch (e) {
 			res.json({
 				"Success": false
 			});
@@ -91,4 +91,15 @@ pollRouter
 
 
 		res.json(completePoll);
+	})
+
+	.patch("/", async (req, res) => {
+		const answersPackage = req.body;
+		const answerRecordsToUpdate = answersPackage.map((answer: AnswerEntity) => answer.answerId);
+		answerRecordsToUpdate.forEach(async (id: string) => {await AnswerRecord.voteForAnswer(id);});
+
+		res.json({
+			"success": true,
+			"answersVoted": answerRecordsToUpdate.length
+		});
 	});
