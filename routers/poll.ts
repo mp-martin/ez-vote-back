@@ -96,9 +96,9 @@ pollRouter
 	.patch("/", async (req, res) => {
 		const pollId: string = req.body.pollId;
 		const {votedPolls} = req.cookies;
-		const oldVotedPolls = votedPolls ? JSON.parse(votedPolls) : [];
+		const isVoted = votedPolls ? JSON.parse(votedPolls) : [];
 
-		if (oldVotedPolls.includes(pollId)) {
+		if (isVoted.includes(pollId)) {
 			res.json({
 				"success": false,
 				"reason": `You have already voted on poll ${pollId}`,
@@ -110,8 +110,8 @@ pollRouter
 		const answerRecordsToUpdate = answersPackage.map((answer: AnswerEntity) => answer.answerId);
 		answerRecordsToUpdate.forEach(async (id: string) => {await AnswerRecord.voteForAnswer(id);});
 
-		oldVotedPolls.push(pollId);
-		res.cookie("votedPolls", JSON.stringify(oldVotedPolls), {
+		isVoted.push(pollId);
+		res.cookie("votedPolls", JSON.stringify(isVoted), {
 			maxAge: 60 * 60 * 24 * 365,
 		});
 		res.json({
