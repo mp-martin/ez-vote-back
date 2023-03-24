@@ -94,12 +94,14 @@ pollRouter
 	})
 
 	.patch("/", async (req, res) => {
-		const answersPackage = req.body;
+		const pollId: string = req.body.pollId;
+		const answersPackage: AnswerEntity[] = req.body.answers;
 		const answerRecordsToUpdate = answersPackage.map((answer: AnswerEntity) => answer.answerId);
 		answerRecordsToUpdate.forEach(async (id: string) => {await AnswerRecord.voteForAnswer(id);});
 
 		res.json({
 			"success": true,
+			"pollId": pollId,
 			"answersVoted": answerRecordsToUpdate.length
 		});
 	});
