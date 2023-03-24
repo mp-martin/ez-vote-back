@@ -56,12 +56,10 @@ export class AnswerRecord implements AnswerEntity {
 
 	static async voteForAnswer(id: string) {
 		const selectedAnswer = await AnswerRecord.getOne(id);
-		console.log(selectedAnswer);
 		if (selectedAnswer === null) {
 			throw new ValidationError("That answer does not exist");
 		}
 		selectedAnswer.votes++;
-		console.log(selectedAnswer);
 
 		await pool.execute("UPDATE `answers` SET `votes` = :votes WHERE `answerId` = :id", {
 			id: selectedAnswer.answerId,
