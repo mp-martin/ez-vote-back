@@ -105,18 +105,18 @@ pollRouter
 			});
 			return;
 		}
-
-		const answersPackage: AnswerEntity[] = req.body.answers;
-		const answerRecordsToUpdate = answersPackage.map((answer: AnswerEntity) => answer.answerId);
-		answerRecordsToUpdate.forEach(async (id: string) => {await AnswerRecord.voteForAnswer(id);});
+		console.log(isVoted);
+		const answersPackage: string[] = req.body.answers;
+		answersPackage.forEach(async (id: string) => {await AnswerRecord.voteForAnswer(id);});
 
 		isVoted.push(pollId);
 		res.cookie("votedPolls", JSON.stringify(isVoted), {
 			maxAge: 60 * 60 * 24 * 365,
+			httpOnly: false
 		});
 		res.json({
 			"success": true,
 			"pollId": pollId,
-			"answersVoted": answerRecordsToUpdate.length
+			"answersVoted": answersPackage.length
 		});
 	});

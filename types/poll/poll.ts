@@ -34,7 +34,13 @@ export type CompletePollRequest = {
 	pollBody: AnswerPoolRequest[];
 };
 
-export type SuccessMsg = {
+export type SuccessMsgNewPoll = {
 	isSuccess: true;
 	newPollId: string;
+};
+
+export type SuccessMsgVote = {
+	success: boolean,
+	pollId: string,
+	answersVoted: number,
 };
