@@ -8,38 +8,38 @@ type AnswerRecordResults = [AnswerRecord[], FieldPacket[]]
 
 export class AnswerRecord implements AnswerEntity {
 
-	answer_id?: string;
-	answer_body: string;
+	answerId?: string;
+	answerBody: string;
 	questionId: string;
 	votes: number;
 
 	constructor(obj: AnswerEntity) {
-		if (!obj.answer_body) {
+		if (!obj.answerBody) {
 			throw new ValidationError("Content of the answer needed!");
 		}
 
-		this.answer_id = obj.answer_id;
-		this.answer_body = obj.answer_body;
+		this.answerId = obj.answerId;
+		this.answerBody = obj.answerBody;
 		this.questionId = obj.questionId;
 		this.votes = obj.votes;
 	}
 
-	async insert(): Promise<string> {
-		if (!this.answer_id) {
-			this.answer_id = uuid();
+	static async insert(answerObj: AnswerEntity): Promise<string> {
+		if (!answerObj.answerId) {
+			answerObj.answerId = uuid();
 		}
 
-		await pool.execute("INSERT INTO `answers`(`answer_id`, `answer_body`, `questionId`) VALUES(:id, :body, :questionId)", {
-			id: this.answer_id,
-			body: this.answer_body,
-			questionId: this.questionId,
+		await pool.execute("INSERT INTO `answers`(`answerId`, `answerBody`, `questionId`) VALUES(:id, :body, :questionId)", {
+			id: answerObj.answerId,
+			body: answerObj.answerBody,
+			questionId: answerObj.questionId,
 		});
 
-		return this.answer_id;
+		return answerObj.answerId;
 	}
 
 	static async getOne(id: string): Promise<AnswerRecord | null> {
-		const [results] = (await pool.execute("SELECT * FROM `answers` WHERE `answer_id` = :id", {
+		const [results] = (await pool.execute("SELECT * FROM `answers` WHERE `answerId` = :id", {
 			id,
 		})) as AnswerRecordResults;
 
@@ -56,18 +56,16 @@ export class AnswerRecord implements AnswerEntity {
 
 	static async voteForAnswer(id: string) {
 		const selectedAnswer = await AnswerRecord.getOne(id);
-		console.log(selectedAnswer);
 		if (selectedAnswer === null) {
 			throw new ValidationError("That answer does not exist");
 		}
 		selectedAnswer.votes++;
-		console.log(selectedAnswer);
 
-		await pool.execute("UPDATE `answers` SET `votes` = :votes WHERE `answer_id` = :id", {
-			id: selectedAnswer.answer_id,
+		await pool.execute("UPDATE `answers` SET `votes` = :votes WHERE `answerId` = :id", {
+			id: selectedAnswer.answerId,
 			votes: selectedAnswer.votes,
 		});
-		return `The answer ${selectedAnswer.answer_body} now has ${selectedAnswer.votes} votes`;
+		return `The answer ${selectedAnswer.answerBody} now has ${selectedAnswer.votes} votes`;
 	}
 
 }

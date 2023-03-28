@@ -4,14 +4,17 @@ import "express-async-errors";
 import {handleError} from "./utils/error";
 import {pollRouter} from "./routers/poll";
 import {userRouter} from "./routers/user";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(cors({
 	origin: "http://localhost:3000",
+	credentials: true
 }));
 
 app.use(json());
+app.use(cookieParser());
 
 app.use("/poll", pollRouter);
 app.use("/user", userRouter);

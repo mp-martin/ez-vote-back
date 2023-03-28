@@ -8,36 +8,36 @@ type PollRecordResults = [PollRecord[], FieldPacket[]]
 
 export class PollRecord implements PollEntity {
 
-	poll_id?: string;
-	poll_title: string;
-	poll_owner?: string | null;
+	pollId?: string;
+	pollTitle: string;
+	pollOwner?: string | null;
 
 	constructor(obj: PollEntity) {
-		if (!obj.poll_title) {
+		if (!obj.pollTitle) {
 			throw new ValidationError("Title of the poll is needed!");
 		}
 
-		this.poll_id = obj.poll_id;
-		this.poll_title = obj.poll_title;
-		this.poll_owner = obj.poll_owner;
+		this.pollId = obj.pollId;
+		this.pollTitle = obj.pollTitle;
+		this.pollOwner = obj.pollOwner;
 	}
 
-	async insert(): Promise<string> {
-		if (!this.poll_id) {
-			this.poll_id = uuid();
+	static async insert(pollObj: PollEntity): Promise<string> {
+		if (!pollObj.pollId) {
+			pollObj.pollId = uuid();
 		}
 
-		await pool.execute("INSERT INTO `polls`(`poll_id`, `poll_title`, `poll_owner`) VALUES(:id, :title, :owner)", {
-			id: this.poll_id,
-			title: this.poll_title,
-			owner: this.poll_owner,
+		await pool.execute("INSERT INTO `polls`(`pollId`, `pollTitle`, `pollOwner`) VALUES(:id, :title, :owner)", {
+			id: pollObj.pollId,
+			title: pollObj.pollTitle,
+			owner: pollObj.pollOwner,
 		});
 
-		return this.poll_id;
+		return pollObj.pollId;
 	}
 
 	static async getOne(id: string): Promise<PollRecord | null> {
-		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `poll_id` = :id", {
+		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `pollId` = :id", {
 			id,
 		})) as PollRecordResults;
 
@@ -45,7 +45,7 @@ export class PollRecord implements PollEntity {
 	}
 
 	static async getByOwner(ownerId: string): Promise<PollRecord[] | null> {
-		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `poll_owner` = :ownerId", {
+		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `pollOwner` = :ownerId", {
 			ownerId,
 		})) as PollRecordResults;
 
