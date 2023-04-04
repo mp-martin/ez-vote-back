@@ -1,6 +1,7 @@
 import express, {json, Router} from "express";
 import cors from "cors";
 import "express-async-errors";
+import rateLimit from "express-rate-limit";
 import {handleError} from "./utils/error";
 import {pollRouter} from "./routers/poll";
 import {userRouter} from "./routers/user";
@@ -14,6 +15,11 @@ app.use(cors({
 }));
 
 app.use(json());
+app.use(rateLimit({
+	windowMs: 5 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+}));
+
 app.use(cookieParser());
 
 const router = Router();
