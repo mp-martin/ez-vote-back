@@ -6,11 +6,12 @@ import {handleError} from "./utils/error";
 import {pollRouter} from "./routers/poll";
 import {userRouter} from "./routers/user";
 import cookieParser from "cookie-parser";
+import {config} from "./config/config";
 
 const app = express();
 
 app.use(cors({
-	origin: "http://localhost:3000",
+	origin: config.corsOrigin,
 	credentials: true
 }));
 
