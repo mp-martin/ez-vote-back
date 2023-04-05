@@ -1,8 +1,10 @@
-![logo](https://zar.networkmanager.pl/static/readme/logo.png)
-
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://zar.networkmanager.pl/static/readme/logo_white.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://zar.networkmanager.pl/static/readme/logo_navy.svg">
+  <img alt="EZ Vote logo" src="https://zar.networkmanager.pl/static/readme/logo_navy.svg">
+</picture>
 # About The Project
 
-![alt text](https://zar.networkmanager.pl/static/readme/main_screen.png)
 EZ Vote is a simple app that allows you to make polls and let people vote in them. 🗳️
 
 Check out the [live demo](https://zar.networkmanager.pl)
@@ -17,7 +19,7 @@ Check out the [live demo](https://zar.networkmanager.pl)
 * Use of cookies to prevent many votes by the same person.
 * Vote percentage graph view for the results
 * Responsive design implemented
-* _The Dudette_ <img alt="the dudette" src="https://zar.networkmanager.pl/static/media/cartoon.8cace218aea52624de38b8835e42bdb8.svg" width="100px">
+* _The Dudette_ <br><img alt="the dudette" src="https://zar.networkmanager.pl/static/media/cartoon.8cace218aea52624de38b8835e42bdb8.svg" width="200px" style="">
 ### Upcoming
 * User registration and login
 * Managing your polls (list / edit / delete)
@@ -30,15 +32,16 @@ Check out the [live demo](https://zar.networkmanager.pl)
 
 # How it works⚙️
 
-1. Create a poll ![alt text](https://zar.networkmanager.pl/static/readme/poll_setting.png) _(use multiple questions if you want)_ ![alt text](https://zar.networkmanager.pl/static/readme/multiple_questions.png)
+1. Create a poll<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/poll_setting.png" width="450px"></kbd><br>
+   _(use multiple questions if you want)_<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/multiple_questions.png" width="450px"></kbd>
 
-2. Select question types![alt text](https://zar.networkmanager.pl/static/readme/single_multi_question.png)
+2. Select question types<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/single_multi_question.png" width="450px"></kbd>
 
-3. Submit and share the link![alt text](https://zar.networkmanager.pl/static/readme/link_sharing.png)
+3. Submit and share the link<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/link_sharing.png" width="450px"></kbd>
 
-5. Let people vote ![alt text](https://zar.networkmanager.pl/static/readme/poll_filling.png)
+5. Let people vote<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/poll_filling.png" width="450px"></kbd>
 
-6. Enjoy the results ![alt text](https://zar.networkmanager.pl/static/readme/results.png)
+6. Enjoy the results<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/results.png" width="450px"></kbd>
 
 
 # About this repo🔍
