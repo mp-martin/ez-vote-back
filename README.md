@@ -1,5 +1,7 @@
 ![logo](https://zar.networkmanager.pl/static/readme/logo.png)
-#About The Project
+
+# About The Project
+
 ![alt text](https://zar.networkmanager.pl/static/readme/main_screen.png)
 EZ Vote is a simple app that allows you to make polls and let people vote in them. 🗳️
 
@@ -21,7 +23,7 @@ Check out the [live demo](https://zar.networkmanager.pl)
 * Managing your polls (list / edit / delete)
 * UX improvements
 
-###Bugs and issues
+### Bugs and issues
 * Poll questions are listed in reverse order compared to the creation order.
 * Incomplete form validation
 * No 404 page view
@@ -39,7 +41,7 @@ Check out the [live demo](https://zar.networkmanager.pl)
 6. Enjoy the results ![alt text](https://zar.networkmanager.pl/static/readme/results.png)
 
 
-#About this repo🔍
+# About this repo🔍
 This is a backend client for the EZ Vote app. It was made using: 
 
 * Typescript [![typescript][typescript]][typescript-url]
@@ -65,7 +67,7 @@ To install EZ Vote locally:
    npm start
    ```
 ###
-<span style="color:#FF5F9E">You will need a the EZ Vote front-end app installed to run everything successfully</span>. 
+<span style="color:#FF5F9E">You will need the EZ Vote front-end app installed to run everything successfully</span>. 
 
 You also have to set up an SQL database (use my [template MariaDB sql file](https://zar.networkmanager.pl/static/readme/ezvote.sql))
 
