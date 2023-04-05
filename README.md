@@ -81,7 +81,7 @@ Check out the front-end app at [https://github.com/mp-martin/ez-vote-front](http
 │   ├── ez-vote-frontend
 ```
 
-#About the author
+# About the author
 My name is Martin and I am on a journey to become a software engineer. By the way, I am a graphic designer.
 
 You can find me at my [Linkedin](https://www.linkedin.com/in/marcin-papierz/) 🤝
