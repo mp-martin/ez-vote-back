@@ -7,7 +7,7 @@
 
 EZ Vote is a simple app that allows you to make polls and let people vote in them. 🗳️
 
-Check out the [live demo](https://zar.networkmanager.pl)
+Check out the live demo at [ezvote.it](https://ezvote.it)
 
 # Features 🔧
 
