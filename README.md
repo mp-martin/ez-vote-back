@@ -3,6 +3,7 @@
   <source media="(prefers-color-scheme: light)" srcset="https://zar.networkmanager.pl/static/readme/logo_navy.svg">
   <img alt="EZ Vote logo" src="https://zar.networkmanager.pl/static/readme/logo_navy.svg">
 </picture>
+
 # About The Project
 
 EZ Vote is a simple app that allows you to make polls and let people vote in them. 🗳️
