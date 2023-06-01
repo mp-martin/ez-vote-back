@@ -1,11 +1,12 @@
 export interface QuestionEntity {
     questionId: string;
-    questionBody: string;
+    questionTitle: string;
     questionType: string;
+    qNo: number;
     pollId: string;
 }
 
 export type QuestionEntityRequest = {
-	questionBody: string;
+	questionTitle: string;
 	questionType: string;
 };

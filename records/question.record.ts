@@ -9,34 +9,37 @@ type QuestionRecordResults = [QuestionRecord[], FieldPacket[]]
 export class QuestionRecord implements QuestionEntity {
 
 	questionId: string;
-	questionBody: string;
+	questionTitle: string;
 	questionType: string;
 	pollId: string;
+	qNo: number;
 
 	constructor(obj: QuestionEntity) {
-		if (!obj.questionBody) {
+		if (!obj.questionTitle) {
 			throw new ValidationError("Content of the question needed!");
 		}
 
 		this.questionId = obj.questionId;
-		this.questionBody = obj.questionBody;
+		this.questionTitle = obj.questionTitle;
 		this.questionType = obj.questionType;
 		this.pollId = obj.pollId;
+		this.qNo = obj.qNo;
 	}
 
-	static async insert(qObj: QuestionEntity): Promise<string> {
-		if (!qObj.questionId) {
-			qObj.questionId = uuid();
+	static async insert(obj: QuestionEntity): Promise<string> {
+		if (!obj.questionId) {
+			obj.questionId = uuid();
 		}
 
-		await pool.execute("INSERT INTO `questions`(`questionId`, `questionBody`, `questionType`, `pollId`) VALUES(:id, :body, :type, :pollId)", {
-			id: qObj.questionId,
-			body: qObj.questionBody,
-			type: qObj.questionType,
-			pollId: qObj.pollId,
+		await pool.execute("INSERT INTO `questions`(`questionId`, `questionBody`, `questionType`, `pollId`, `qNo`) VALUES(:id, :body, :type, :pollId, :qNo)", {
+			id: obj.questionId,
+			body: obj.questionTitle,
+			type: obj.questionType,
+			pollId: obj.pollId,
+			qNo: obj.qNo
 		});
 
-		return qObj.questionId;
+		return obj.questionId;
 	}
 
 	static async getOne(id: string): Promise<QuestionRecord | null> {

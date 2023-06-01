@@ -3,7 +3,14 @@ import {ValidationError} from "../utils/error";
 import {QuestionRecord} from "../records/question.record";
 import {AnswerRecord} from "../records/answer.record";
 import {PollRecord} from "../records/poll.record";
-import {AnswerEntity, CompletePoll, PollEntity, QuestionEntity} from "../types";
+import {
+	AnswerEntity,
+	CompletePoll,
+	PollEntity,
+	PollEntityRequest,
+	QuestionEntity,
+	QuestionEntityRequest
+} from "../types";
 
 export const pollRouter = Router();
 
@@ -11,26 +18,21 @@ pollRouter
 
 	.post("/", async (req, res) => {
 
-		const newPollEntity: PollEntity = {pollTitle: req.body.pollTitle};
-		const newPollInDb = new PollRecord(newPollEntity);
-		await PollRecord.insert(newPollInDb);
-		console.log(newPollInDb);
+		// const newPoll: PollEntityRequest = {pollTitle: req.body.pollTitle};
+		// const newPollToAdd = new PollRecord(newPoll);
+		// await PollRecord.insert(newPollToAdd);
 
-		// const newPoll: CompletePoll = req.body;
-		// const newPollRecord: PollEntity = newPoll.pollHeader;
-		//
-		// try {
-		// 	const pollId = await PollRecord.insert(newPollRecord);
-		// 	newPoll.pollHeader["pollId"] = pollId;
-		// 	newPoll.pollBody.map((element) => {
-		// 		element.questionHeader.pollId = pollId;
-		// 	});
-		//
-		// 	const newQuestionRecords: QuestionEntity[] = newPoll.pollBody.map((element) => {
-		// 		return {
-		// 			...element.questionHeader
-		// 		};
-		// 	});
+
+		const newQuestions: QuestionEntityRequest[] = req.body.pollBody.map((element: QuestionEntityRequest, i: number) => {
+			return {
+				questionTitle: element.questionTitle,
+				questionType: element.questionType,
+				qNo: i,
+			};
+		});
+
+		console.log(newQuestions);
+
 		//
 		// 	const questionIds = await Promise.all(newQuestionRecords.map(async (record) => await QuestionRecord.insert(record)));
 		//
@@ -113,7 +115,9 @@ pollRouter
 		}
 		console.log(isVoted);
 		const answersPackage: string[] = req.body.answers;
-		answersPackage.forEach(async (id: string) => {await AnswerRecord.voteForAnswer(id);});
+		answersPackage.forEach(async (id: string) => {
+			await AnswerRecord.voteForAnswer(id);
+		});
 
 		isVoted.push(pollId);
 		res.cookie("votedPolls", JSON.stringify(isVoted), {
