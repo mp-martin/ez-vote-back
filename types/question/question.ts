@@ -1,12 +1,15 @@
+import {AnswerEntityRequest} from "../answer";
+
 export interface QuestionEntity {
     questionId: string;
-    questionTitle: string;
+    question: string;
     questionType: string;
     qNo: number;
     pollId: string;
 }
 
 export type QuestionEntityRequest = {
-	questionTitle: string;
+	question: string;
 	questionType: string;
+    answers: AnswerEntityRequest[]
 };
