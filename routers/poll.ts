@@ -18,18 +18,25 @@ pollRouter
 
 	.post("/", async (req, res) => {
 
-		// const newPoll: PollEntityRequest = {pollTitle: req.body.pollTitle};
-		// const newPollToAdd = new PollRecord(newPoll);
-		// await PollRecord.insert(newPollToAdd);
-
+		const newPoll: PollEntityRequest = {pollTitle: req.body.pollTitle};
+		const newPollToAdd = new PollRecord(newPoll);
+		const newPollId = await PollRecord.insert(newPollToAdd);
 
 		const newQuestions: QuestionEntityRequest[] = req.body.pollBody.map((element: QuestionEntityRequest, i: number) => {
 			return {
 				questionTitle: element.questionTitle,
 				questionType: element.questionType,
 				qNo: i,
+				pollId: newPollId,
 			};
 		});
+
+		const newQuestionIds = newQuestions.map(async (question) => {
+			return await QuestionRecord.insert(question);
+
+		});
+
+
 
 		console.log(newQuestions);
 
