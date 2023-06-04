@@ -68,40 +68,39 @@ pollRouter
 	})
 
 	.get("/:id", async (req, res) => {
-		console.log("request");
-		// const pollId = req.params.id;
-		// const poll = await PollRecord.getOne(pollId);
-		// const questions = (await QuestionRecord.getByPollOfOrigin(pollId));
-		//
-		// if (!poll) {
-		// 	throw new ValidationError("Cannot get that poll`s details. Try again later.");
-		// }
-		//
-		// if (!questions) {
-		// 	throw new ValidationError("Cannot get questions from the poll. Please try again later.");
-		// }
-		//
-		// const promises = questions.map(async (question) => {
-		// 	const answers = await AnswerRecord.getByQuestionOfOrigin(question.questionId);
-		//
-		// 	if (!answers) {
-		// 		throw new ValidationError("Cannot get answers from the poll. Please try again later.");
-		// 	}
-		//
-		// 	return {
-		// 		questionHeader: question,
-		// 		answers
-		// 	};
-		// });
-		// const answers = await Promise.all(promises);
-		//
-		// const completePoll: CompletePoll = {
-		// 	pollHeader: poll,
-		// 	pollBody: answers
-		// };
-		//
-		//
-		// res.json(completePoll);
+		const pollId = req.params.id;
+		const poll = await PollRecord.getOne(pollId);
+		const questions = (await QuestionRecord.getByPollOfOrigin(pollId));
+
+		if (!poll) {
+			throw new ValidationError("Cannot get that poll`s details. Try again later.");
+		}
+
+		if (!questions) {
+			throw new ValidationError("Cannot get questions from the poll. Please try again later.");
+		}
+
+		const promises = questions.map(async (question) => {
+			const answers = await AnswerRecord.getByQuestionOfOrigin(question.questionId);
+
+			if (!answers) {
+				throw new ValidationError("Cannot get answers from the poll. Please try again later.");
+			}
+
+			return {
+				questionHeader: question,
+				answers
+			};
+		});
+		const answers = await Promise.all(promises);
+
+		const completePoll: CompletePoll = {
+			pollHeader: poll,
+			pollBody: answers
+		};
+
+
+		res.json(completePoll);
 	})
 
 	.patch("/", async (req, res) => {

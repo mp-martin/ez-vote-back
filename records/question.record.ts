@@ -51,7 +51,7 @@ export class QuestionRecord implements QuestionEntity {
 	}
 
 	static async getByPollOfOrigin(pollId: string): Promise<QuestionRecord[] | null> {
-		const [results] = (await pool.execute("SELECT * FROM `questions` WHERE `pollId` = :pollId", {
+		const [results] = (await pool.execute("SELECT * FROM `questions` WHERE `pollId` = :pollId ORDER BY `qNo` ASC", {
 			pollId,
 		})) as QuestionRecordResults;
 
