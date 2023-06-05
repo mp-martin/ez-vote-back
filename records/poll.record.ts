@@ -19,7 +19,7 @@ export class PollRecord implements PollEntity {
 
 		this.pollId = obj.pollId;
 		this.pollTitle = obj.pollTitle;
-		this.pollOwner = obj.pollOwner;
+		this.pollOwner = obj.pollOwner ?? null;
 	}
 
 	static async insert(pollObj: PollEntity): Promise<string> {

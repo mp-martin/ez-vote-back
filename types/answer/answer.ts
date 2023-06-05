@@ -1,10 +1,11 @@
 export interface AnswerEntity {
     answerId?: string;
-    answerBody: string;
+    aNo: number
+    answer: string;
     votes: number;
     questionId: string;
 }
 
 export type AnswerEntityRequest = {
-	answerBody: string;
+	answer: string;
 };

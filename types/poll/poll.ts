@@ -11,7 +11,7 @@ export interface PollEntity {
 export type PollEntityRequest = {
 	pollTitle: string;
 	/* eslint-disable @typescript-eslint/ban-types */
-	pollOwner: string | null;
+	pollOwner?: string | null;
 };
 
 export interface AnswerPool {
