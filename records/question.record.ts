@@ -9,34 +9,37 @@ type QuestionRecordResults = [QuestionRecord[], FieldPacket[]]
 export class QuestionRecord implements QuestionEntity {
 
 	questionId: string;
-	questionBody: string;
+	question: string;
 	questionType: string;
 	pollId: string;
+	qNo: number;
 
 	constructor(obj: QuestionEntity) {
-		if (!obj.questionBody) {
+		if (!obj.question) {
 			throw new ValidationError("Content of the question needed!");
 		}
 
 		this.questionId = obj.questionId;
-		this.questionBody = obj.questionBody;
+		this.question = obj.question;
 		this.questionType = obj.questionType;
 		this.pollId = obj.pollId;
+		this.qNo = obj.qNo;
 	}
 
-	static async insert(qObj: QuestionEntity): Promise<string> {
-		if (!qObj.questionId) {
-			qObj.questionId = uuid();
+	static async insert(obj: QuestionEntity): Promise<string> {
+		if (!obj.questionId) {
+			obj.questionId = uuid();
 		}
 
-		await pool.execute("INSERT INTO `questions`(`questionId`, `questionBody`, `questionType`, `pollId`) VALUES(:id, :body, :type, :pollId)", {
-			id: qObj.questionId,
-			body: qObj.questionBody,
-			type: qObj.questionType,
-			pollId: qObj.pollId,
+		await pool.execute("INSERT INTO `questions`(`questionId`, `question`, `questionType`, `pollId`, `qNo`) VALUES(:id, :question, :type, :pollId, :qNo)", {
+			id: obj.questionId,
+			question: obj.question,
+			type: obj.questionType,
+			pollId: obj.pollId,
+			qNo: obj.qNo
 		});
 
-		return qObj.questionId;
+		return obj.questionId;
 	}
 
 	static async getOne(id: string): Promise<QuestionRecord | null> {
@@ -48,7 +51,7 @@ export class QuestionRecord implements QuestionEntity {
 	}
 
 	static async getByPollOfOrigin(pollId: string): Promise<QuestionRecord[] | null> {
-		const [results] = (await pool.execute("SELECT * FROM `questions` WHERE `pollId` = :pollId", {
+		const [results] = (await pool.execute("SELECT * FROM `questions` WHERE `pollId` = :pollId ORDER BY `qNo` ASC", {
 			pollId,
 		})) as QuestionRecordResults;
 

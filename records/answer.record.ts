@@ -9,19 +9,21 @@ type AnswerRecordResults = [AnswerRecord[], FieldPacket[]]
 export class AnswerRecord implements AnswerEntity {
 
 	answerId?: string;
-	answerBody: string;
+	aNo: number;
+	answer: string;
 	questionId: string;
 	votes: number;
 
 	constructor(obj: AnswerEntity) {
-		if (!obj.answerBody) {
+		if (!obj.answer) {
 			throw new ValidationError("Content of the answer needed!");
 		}
 
 		this.answerId = obj.answerId;
-		this.answerBody = obj.answerBody;
+		this.answer = obj.answer;
 		this.questionId = obj.questionId;
 		this.votes = obj.votes;
+		this.aNo = obj.aNo;
 	}
 
 	static async insert(answerObj: AnswerEntity): Promise<string> {
@@ -29,10 +31,12 @@ export class AnswerRecord implements AnswerEntity {
 			answerObj.answerId = uuid();
 		}
 
-		await pool.execute("INSERT INTO `answers`(`answerId`, `answerBody`, `questionId`) VALUES(:id, :body, :questionId)", {
-			id: answerObj.answerId,
-			body: answerObj.answerBody,
+		await pool.execute("INSERT INTO `answers`(`answerId`, `answer`, `questionId`, `aNo`, `votes`) VALUES(:answerId, :answer, :questionId, :aNo, :votes)", {
+			answerId: answerObj.answerId,
+			answer: answerObj.answer,
 			questionId: answerObj.questionId,
+			aNo: answerObj.aNo,
+			votes: answerObj.votes
 		});
 
 		return answerObj.answerId;
@@ -47,7 +51,7 @@ export class AnswerRecord implements AnswerEntity {
 	}
 
 	static async getByQuestionOfOrigin(questionId: string): Promise<AnswerRecord[] | null> {
-		const [results] = (await pool.execute("SELECT * FROM `answers` WHERE `questionId` = :questionId", {
+		const [results] = (await pool.execute("SELECT * FROM `answers` WHERE `questionId` = :questionId ORDER BY `aNo` ASC", {
 			questionId,
 		})) as AnswerRecordResults;
 
@@ -65,7 +69,7 @@ export class AnswerRecord implements AnswerEntity {
 			id: selectedAnswer.answerId,
 			votes: selectedAnswer.votes,
 		});
-		return `The answer ${selectedAnswer.answerBody} now has ${selectedAnswer.votes} votes`;
+		return `The answer ${selectedAnswer.answer} now has ${selectedAnswer.votes} votes`;
 	}
 
 }

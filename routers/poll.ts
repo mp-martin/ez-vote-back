@@ -3,49 +3,58 @@ import {ValidationError} from "../utils/error";
 import {QuestionRecord} from "../records/question.record";
 import {AnswerRecord} from "../records/answer.record";
 import {PollRecord} from "../records/poll.record";
-import {AnswerEntity, CompletePoll, PollEntity, QuestionEntity} from "../types";
+import {
+	AnswerEntity, AnswerEntityRequest,
+	CompletePoll,
+	PollEntity,
+	PollEntityRequest,
+	QuestionEntity,
+	QuestionEntityRequest
+} from "../types";
 
 export const pollRouter = Router();
 
 pollRouter
 
 	.post("/", async (req, res) => {
-		const newPoll: CompletePoll = req.body;
-		const newPollRecord: PollEntity = newPoll.pollHeader;
 
 		try {
-			const pollId = await PollRecord.insert(newPollRecord);
-			newPoll.pollHeader["pollId"] = pollId;
-			newPoll.pollBody.map((element) => {
-				element.questionHeader.pollId = pollId;
-			});
 
-			const newQuestionRecords: QuestionEntity[] = newPoll.pollBody.map((element) => {
+			const newPoll: PollEntityRequest = {pollTitle: req.body.pollTitle};
+			const newPollToAdd = new PollRecord(newPoll);
+			const newPollId = await PollRecord.insert(newPollToAdd);
+
+			const newQuestions: QuestionEntity[] = req.body.pollBody.map((element: QuestionEntityRequest, i: number) => {
 				return {
-					...element.questionHeader
+					qNo: i,
+					pollId: newPollId,
+					questionId: undefined,
+					question: element.question,
+					questionType: element.questionType,
 				};
 			});
 
-			const questionIds = await Promise.all(newQuestionRecords.map(async (record) => await QuestionRecord.insert(record)));
+			const newQuestionIds = await Promise.all(newQuestions.map(async (question) => {
+				return await QuestionRecord.insert(question);
+			}));
 
-			newPoll.pollBody.map((element, index) => {
-				element.questionHeader.questionId = questionIds[index];
-			});
-
-			const newAnswerRecords = newPoll.pollBody.map((element) => {
-				return element.answers.map((answer) => {
+			const newAnswers: AnswerEntity[] = req.body.pollBody.map((q: QuestionEntityRequest, i: number) => {
+				return q.answers.map((a: AnswerEntityRequest, k) => {
 					return {
-						...answer,
-						questionId: element.questionHeader.questionId
+						aNo: k,
+						questionId: newQuestionIds[i],
+						answerId: undefined,
+						answer: a.answer,
+						votes: 0
 					};
 				});
-			}).flat();
+			});
 
-			await Promise.all(newAnswerRecords.map(async (record: AnswerEntity) => await AnswerRecord.insert(record)));
+			await Promise.all(newAnswers.flat().map(async (record: AnswerEntity) => await AnswerRecord.insert(record)));
 
 			res.json({
 				"success": true,
-				"newPollId": pollId
+				"newPollId": newPollId
 			});
 
 		} catch (e) {
@@ -54,6 +63,7 @@ pollRouter
 			});
 			throw new Error(e);
 		}
+
 
 	})
 
@@ -107,7 +117,9 @@ pollRouter
 		}
 		console.log(isVoted);
 		const answersPackage: string[] = req.body.answers;
-		answersPackage.forEach(async (id: string) => {await AnswerRecord.voteForAnswer(id);});
+		answersPackage.forEach(async (id: string) => {
+			await AnswerRecord.voteForAnswer(id);
+		});
 
 		isVoted.push(pollId);
 		res.cookie("votedPolls", JSON.stringify(isVoted), {
