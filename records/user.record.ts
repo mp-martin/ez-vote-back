@@ -9,19 +9,19 @@ type UserRecordResults = [UserRecord[], FieldPacket[]]
 export class UserRecord implements UserEntity {
 
 	userId?: string;
-	userName: string;
 	userLogin: string;
-	userPw: string;
+	userHash: string;
+	userSalt: string;
 
 	constructor(obj: UserEntity) {
-		if (!obj.userName || !obj.userLogin || !obj.userPw) {
-			throw new ValidationError("Make sure user name, login and password are provided!");
+		if (!obj.userLogin || !obj.userHash || !obj.userSalt) {
+			throw new ValidationError("Make sure user login, hash and salt are provided!");
 		}
 
 		this.userId = obj.userId;
-		this.userName = obj.userName;
 		this.userLogin = obj.userLogin;
-		this.userPw = obj.userPw;
+		this.userHash = obj.userHash;
+		this.userSalt = obj.userSalt;
 	}
 
 	static async insert(userObj: UserEntity): Promise<string> {
@@ -29,11 +29,11 @@ export class UserRecord implements UserEntity {
 			userObj.userId = uuid();
 		}
 
-		await pool.execute("INSERT INTO `users`(`userId`, `userName`, `userLogin`, `userPw`) VALUES(:id, :name, :login, :pw)", {
+		await pool.execute("INSERT INTO `users`(`userId`, `userLogin`,`userHash`, `userSalt`) VALUES(:id, :login, :hash, :salt)", {
 			id: userObj.userId,
-			name: userObj.userName,
 			login: userObj.userLogin,
-			pw: userObj.userPw
+			hash: userObj.userHash,
+			salt: userObj.userSalt,
 		});
 
 		return userObj.userId;
@@ -42,6 +42,14 @@ export class UserRecord implements UserEntity {
 	static async getOne(id: string): Promise<UserRecord | null> {
 		const [results] = (await pool.execute("SELECT * FROM `users` WHERE `userId` = :id", {
 			id,
+		})) as UserRecordResults;
+
+		return results.length === 0 ? null : new UserRecord(results[0]);
+	}
+
+	static async getOneByLogin(login: string): Promise<UserRecord | null> {
+		const [results] = (await pool.execute("SELECT * FROM `users` WHERE `userLogin` = :login", {
+			login,
 		})) as UserRecordResults;
 
 		return results.length === 0 ? null : new UserRecord(results[0]);
