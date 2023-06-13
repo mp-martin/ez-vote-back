@@ -1,12 +1,15 @@
 import express, {json, Router} from "express";
-import cors from "cors";
 import "express-async-errors";
+import "dotenv/config";
+import passport from "passport";
+import cors from "cors";
 import rateLimit from "express-rate-limit";
 import {handleError} from "./utils/error";
 import {pollRouter} from "./routers/poll";
 import {userRouter} from "./routers/user";
 import cookieParser from "cookie-parser";
 import {config} from "./config/config";
+import {default as passportCfg} from "./config/passport";
 
 const app = express();
 
@@ -15,6 +18,9 @@ app.use(cors({
 	credentials: true
 }));
 
+passportCfg(passport);
+app.use(passport.initialize());
+app.use(express.urlencoded({extended: true}));
 app.use(json());
 app.use(rateLimit({
 	windowMs: 5 * 60 * 1000, // 15 minutes
