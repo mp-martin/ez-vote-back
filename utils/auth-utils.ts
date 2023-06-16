@@ -22,9 +22,9 @@ export function genPassword(password: string) {
 	};
 }
 
-export function issueJwt(user: UserRecord) {
+export function issueJwt(user: Omit<UserRecord, "userHash" | "userSalt">) {
 	const _id = user.userId;
-	const expiresIn = "1d";
+	const expiresIn = "86400000";
 	const payload = {
 		sub: _id,
 		iat: Date.now()

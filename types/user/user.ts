@@ -9,3 +9,10 @@ export interface UserLoginOrRegisterRequest {
     userLogin: string;
     userPassword: string;
 }
+
+export interface AuthPositiveResponse {
+    success: boolean
+    user: {userId: string, userLogin: string}
+    token: string
+    expires: string
+}

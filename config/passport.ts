@@ -18,7 +18,8 @@ const strategy = new JwtStrategy(options, async (payload, done) => {
 	try {
 		const user = await UserRecord.getOne(payload.sub);
 		if (user) {
-			return done(null, user);
+			const {userId, userLogin} = user;
+			return done(null, {userId, userLogin});
 		} else {
 			done(null, false);
 		}
