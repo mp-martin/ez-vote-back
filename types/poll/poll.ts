@@ -5,13 +5,12 @@ import {QuestionEntityRequest} from "../question";
 export interface PollEntity {
     pollId?: string;
     pollTitle: string;
-    pollOwner?: string | null;
+    pollOwner: string | null;
 }
 
 export type PollEntityRequest = {
 	pollTitle: string;
-	/* eslint-disable @typescript-eslint/ban-types */
-	pollOwner?: string | null;
+	pollOwner: string | null;
 };
 
 export interface AnswerPool {
