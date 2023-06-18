@@ -10,6 +10,7 @@ type PollRecordResults = [PollRecord[], FieldPacket[]]
 export class PollRecord implements PollEntity {
 
 	pollId?: string;
+	createdAt?: string;
 	pollTitle: string;
 	pollOwner: string | null;
 
@@ -53,7 +54,7 @@ export class PollRecord implements PollEntity {
 	}
 
 	static async getByOwner(ownerId: string): Promise<PollRecord[] | null> {
-		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `pollOwner` = :ownerId", {
+		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `pollOwner` = :ownerId ORDER BY `createdAt` DESC", {
 			ownerId,
 		})) as PollRecordResults;
 

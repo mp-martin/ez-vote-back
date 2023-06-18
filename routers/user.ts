@@ -3,13 +3,14 @@ import {UserRecord} from "../records/user.record";
 import {genPassword, issueJwt, validPassword} from "../utils/auth-utils";
 import {ValidationError} from "../utils/error";
 import passport from "passport";
-import {AuthPositiveResponse} from "../types";
+import {AuthedUserShowPollsRequest, AuthPositiveResponse, UserPollsSuccessResponse} from "../types";
+import {PollRecord} from "../records/poll.record";
 
 export const userRouter = Router();
 
 userRouter
 
-	.post("/login", async (req, res, next) => {
+	.post("/login", async (req, res) => {
 		try {
 			const user = await UserRecord.getOneByLogin(req.body.userLogin);
 			if (!user) {
@@ -45,14 +46,15 @@ userRouter
 
 	})
 
-	.post("/register", async (req, res, next) => {
+	.post("/register", async (req, res) => {
 		const {userLogin} = req.body;
 		const nameCheck = await UserRecord.getOneByLogin(userLogin);
 		if (nameCheck) {
 			return res.status(401).json({
 				success: false,
 				reason: "that user name is already taken"
-			});}
+			});
+		}
 		const saltHash = genPassword(req.body.userPassword);
 		const userSalt = saltHash.salt;
 		const userHash = saltHash.hash;
@@ -77,15 +79,23 @@ userRouter
 				} as AuthPositiveResponse);
 			}
 
-		} catch (e) {
+		} catch {
 			throw new ValidationError("Something went wrong when registering a new user");
 		}
 
 	})
 
-	.get("/protected", passport.authenticate("jwt", {session: false}), async (req, res, next) => {
-		console.log(req.user);
-		res.status(200).json({success: true, message: "you are authorized!"});
-	});
+	.get("/mypolls", passport.authenticate("jwt", {session: false}), async (req, res) => {
+
+		try {
+			const user = req.user as AuthedUserShowPollsRequest;
+			const userPolls = await PollRecord.getByOwner(user.userId);
+			res.status(200).json({success: true, polls: userPolls} as UserPollsSuccessResponse);
+		} catch {
+			throw new ValidationError("Something went wrong when getting your polls");
+		}
+
+	})
+;
 
 

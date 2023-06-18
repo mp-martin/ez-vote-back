@@ -10,6 +10,11 @@ export interface UserLoginOrRegisterRequest {
     userPassword: string;
 }
 
+export interface AuthedUserShowPollsRequest {
+    userId: string;
+    userLogin: string;
+}
+
 export interface AuthPositiveResponse {
     success: boolean
     user: {userId: string, userLogin: string}
