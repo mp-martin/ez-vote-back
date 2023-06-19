@@ -48,5 +48,5 @@ export type SuccessMsgVote = {
 
 export type UserPollsSuccessResponse = {
     success: true,
-    polls: PollRecord[]
+    polls: PollRecord[] | null
 }
