@@ -144,3 +144,6 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node
 
 config/config.ts
+
+id_rsa_pub.pem
+id_rsa_priv.pem

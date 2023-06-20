@@ -1,17 +1,18 @@
 import {AnswerEntity, AnswerEntityRequest} from "../answer";
 import {QuestionRecord} from "../../records/question.record";
 import {QuestionEntityRequest} from "../question";
+import {PollRecord} from "../../records/poll.record";
 
 export interface PollEntity {
+	createdAt?: string;
     pollId?: string;
     pollTitle: string;
-    pollOwner?: string | null;
+    pollOwner: string | null;
 }
 
 export type PollEntityRequest = {
-	pollTitle: string;
-	/* eslint-disable @typescript-eslint/ban-types */
-	pollOwner?: string | null;
+    pollTitle: string;
+    pollOwner: string | null;
 };
 
 export interface AnswerPool {
@@ -20,8 +21,8 @@ export interface AnswerPool {
 }
 
 export type AnswerPoolRequest = {
-	questionHeader: QuestionEntityRequest;
-	answers: AnswerEntityRequest[];
+    questionHeader: QuestionEntityRequest;
+    answers: AnswerEntityRequest[];
 };
 
 export interface CompletePoll {
@@ -30,17 +31,22 @@ export interface CompletePoll {
 }
 
 export type CompletePollRequest = {
-	pollHeader: PollEntityRequest;
-	pollBody: AnswerPoolRequest[];
+    pollHeader: PollEntityRequest;
+    pollBody: AnswerPoolRequest[];
 };
 
 export type SuccessMsgNewPoll = {
-	isSuccess: true;
-	newPollId: string;
+    isSuccess: true;
+    newPollId: string;
 };
 
 export type SuccessMsgVote = {
-	success: boolean,
-	pollId: string,
-	answersVoted: number,
+    success: boolean,
+    pollId: string,
+    answersVoted: number,
 };
+
+export type UserPollsSuccessResponse = {
+    success: true,
+    polls: PollRecord[] | null
+}

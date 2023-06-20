@@ -6,7 +6,6 @@ import {PollRecord} from "../records/poll.record";
 import {
 	AnswerEntity, AnswerEntityRequest,
 	CompletePoll,
-	PollEntity,
 	PollEntityRequest,
 	QuestionEntity,
 	QuestionEntityRequest
@@ -19,8 +18,7 @@ pollRouter
 	.post("/", async (req, res) => {
 
 		try {
-
-			const newPoll: PollEntityRequest = {pollTitle: req.body.pollTitle};
+			const newPoll: PollEntityRequest = {pollTitle: req.body.pollTitle, pollOwner: req.body.pollOwner};
 			const newPollToAdd = new PollRecord(newPoll);
 			const newPollId = await PollRecord.insert(newPollToAdd);
 
