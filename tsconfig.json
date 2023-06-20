@@ -12,6 +12,6 @@
     "emitDecoratorMetadata": true,
     "moduleResolution": "Node",
     "esModuleInterop": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
   }
 }

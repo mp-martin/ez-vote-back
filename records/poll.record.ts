@@ -3,14 +3,16 @@ import {ValidationError} from "../utils/error";
 import {FieldPacket} from "mysql2";
 import {PollEntity} from "../types";
 import {v4 as uuid} from "uuid";
+import {UserRecord} from "./user.record";
 
 type PollRecordResults = [PollRecord[], FieldPacket[]]
 
 export class PollRecord implements PollEntity {
 
 	pollId?: string;
+	createdAt?: string;
 	pollTitle: string;
-	pollOwner?: string | null;
+	pollOwner: string | null;
 
 	constructor(obj: PollEntity) {
 		if (!obj.pollTitle) {
@@ -22,9 +24,16 @@ export class PollRecord implements PollEntity {
 		this.pollOwner = obj.pollOwner ?? null;
 	}
 
-	static async insert(pollObj: PollEntity): Promise<string> {
+	static async insert(pollObj: PollEntity): Promise<string | void> {
 		if (!pollObj.pollId) {
 			pollObj.pollId = uuid();
+		}
+
+		if (pollObj.pollOwner) {
+			const user = await UserRecord.getOne(pollObj.pollOwner);
+			if (!user) {
+				throw new ValidationError("That user does not exist");
+			}
 		}
 
 		await pool.execute("INSERT INTO `polls`(`pollId`, `pollTitle`, `pollOwner`) VALUES(:id, :title, :owner)", {
@@ -45,7 +54,7 @@ export class PollRecord implements PollEntity {
 	}
 
 	static async getByOwner(ownerId: string): Promise<PollRecord[] | null> {
-		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `pollOwner` = :ownerId", {
+		const [results] = (await pool.execute("SELECT * FROM `polls` WHERE `pollOwner` = :ownerId ORDER BY `createdAt` DESC", {
 			ownerId,
 		})) as PollRecordResults;
 
