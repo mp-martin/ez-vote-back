@@ -6,7 +6,7 @@
 
 # About The Project
 
-<kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/main_screen.png"></kbd>
+<img alt="" src="https://zar.networkmanager.pl/static/readme/app_screenshot.png">
 
 EZ Vote is a simple app that allows you to make polls and let people vote in them. 🗳️
 
@@ -14,38 +14,40 @@ Check out the live demo at [ezvote.it](https://ezvote.it)
 
 # Features 🔧
 
-### Current
+### New
+* User login and registration system using JWT auth
+* Users now able to see their polls
+* React Hook Forms for creating polls
+* Bugfix: questions and answers order is now always preserved
+
+### Basic
 * Multiple questions in a single poll
 * Open-ended questions (multiple choice)
 * Close-ended questions (single choice)
 * Easy access to polls and results via unique links
 * Use of cookies to prevent many votes by the same person.
 * Vote percentage graph view for the results
-* Responsive design implemented
+* Responsive design
 * _The Dudette_ <br><img alt="the dudette" src="https://zar.networkmanager.pl/static/media/cartoon.8cace218aea52624de38b8835e42bdb8.svg" width="200px" style="">
+
 ### Upcoming
-* User registration and login
-* Managing your polls (list / edit / delete)
-* UX improvements
+* Users can delete their polls
+* Admin account
+* Password resetting
 
 ### Bugs and issues
-* Poll questions are listed in reverse order compared to the creation order.
-* Incomplete form validation
-* No 404 page view
+* False errors may sometimes occur during viewing "My polls" section
 
 # How it works⚙️
 
-1. Create a poll<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/poll_setting.png" width="450px"></kbd><br>
-   _(use multiple questions if you want)_<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/multiple_questions.png" width="450px"></kbd>
-
-2. Select question types<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/single_multi_question.png" width="450px"></kbd>
-
-3. Submit and share the link<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/link_sharing.png" width="450px"></kbd>
-
-5. Let people vote<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/poll_filling.png" width="450px"></kbd>
-
-6. Enjoy the results<br><kbd><img alt="" src="https://zar.networkmanager.pl/static/readme/results.png" width="450px"></kbd>
-
+1. Create an account (optional)
+2. Click on "Create a poll"
+3. Add questions and answers
+4. Select a type for each question: open (multiple choice) or closed (single choice)
+5. Submit and share the link
+6. Let people vote
+7. Enjoy the results
+8. If you were logged in while performing above steps, the poll will show up in "My polls" tab
 
 # About this repo🔍
 This is a backend client for the EZ Vote app. It was made using: 
@@ -54,8 +56,7 @@ This is a backend client for the EZ Vote app. It was made using:
 * Express [![express][express]][express-url]
 * MySQL [![mysql][mysql]][mysql-url]
 * MariaDB [![mariadb][mariadb]][mariadb-url]
-* A package or two _([cookie-parser](https://github.com/expressjs/cookie-parser) or [Express Rate Limit](https://github.com/express-rate-limit/express-rate-limit), for instance)_
-
+* Additional packages, such as [cookie-parser](https://github.com/expressjs/cookie-parser), [Express Rate Limit](https://github.com/express-rate-limit/express-rate-limit)
 
 ### Install locally
 To install EZ Vote locally:
@@ -68,12 +69,16 @@ To install EZ Vote locally:
    ```sh
    npm install
    ```
-3. run npm start
-   ```sh
-   npm start
-   ```
+3. Generate public / private key pair for authorization to work. To do this, run `generateKeypair.ts` file. 
+Two files should now appear in the main directory: `id_rsa_pub.pem` and `id_rsa_priv.pem`
+4. Configure `config.example.ts` by removing comments, setting the variables according to your environment and renaming the file to `config.ts`
+5. Run npm start
+```sh
+npm start
+```
+
 ###
-<span style="color:#FF5F9E">You will need the EZ Vote front-end app installed to run everything successfully</span>. 
+<span style="color:#FF5F9E">You will need the EZ Vote front-end client installed to run the app</span>. 
 
 You also have to set up an SQL database (use my [template MariaDB sql file](https://zar.networkmanager.pl/static/readme/ezvote.sql))
 
@@ -88,9 +93,9 @@ Check out the front-end app at [https://github.com/mp-martin/ez-vote-front](http
 ```
 
 # About the author
-My name is Martin and I am on a journey to become a software engineer. By the way, I am a graphic designer.
+My name is Martin, and I am on a journey to become a software engineer. By the way, I am a graphic designer.
 
-You can find me at my [Linkedin](https://www.linkedin.com/in/marcin-papierz/) 🤝
+You can find me on my [LinkedIn](https://www.linkedin.com/in/marcin-papierz/) 🤝
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
