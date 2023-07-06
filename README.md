@@ -80,7 +80,7 @@ npm start
 ###
 <span style="color:#FF5F9E">You will need the EZ Vote front-end client installed to run the app</span>. 
 
-You also have to set up an SQL database (use my [template MariaDB sql file](https://zar.networkmanager.pl/static/readme/ezvote.sql))
+You also have to set up an SQL database (use my [template MariaDB sql file](https://zar.networkmanager.pl/static/readme/ezvote_db_tables.sql) for creating proper tables)
 
 Check out the front-end app at [https://github.com/mp-martin/ez-vote-front](https://github.com/mp-martin/ez-vote-front)
 
